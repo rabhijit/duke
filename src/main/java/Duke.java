@@ -1,20 +1,57 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.IOException;
 
 public class Duke {
-    public static void main(String[] args) throws DukeException {
+    public static void main(String[] args) throws DukeException, IOException {
+        ArrayList<Task> items = new ArrayList<Task>();
+        Scanner inputScanner = new Scanner(System.in);
+        File file = new File("data/duke.txt");
+        Scanner fileScanner = new Scanner(file);
+
+        while (fileScanner.hasNextLine()) {
+            String[] line = fileScanner.nextLine().split("`");
+            boolean isDone = (Integer.parseInt(line[2]) == 1);
+            if (line[0].equals("T")) {
+                Todo newTodo = new Todo(line[1], isDone);
+                items.add(newTodo);
+            }
+            else if (line[0].equals("D")) {
+                Deadline newDeadline = new Deadline(line[1], line[3], isDone);
+                items.add(newDeadline);
+            }
+            else if (line[0].equals("E")) {
+                Event newEvent = new Event(line[1], line[3], isDone);
+                items.add(newEvent);
+            }
+        }
+
         System.out.println("\t____________________________________________________________");
         System.out.println("\tHello! I'm Duke");
         System.out.println("\tWhat can I do for you?");
         System.out.println("\t____________________________________________________________");
 
-        ArrayList<Task> items = new ArrayList<Task>();
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
-                String input = scanner.nextLine();
+                String input = inputScanner.nextLine();
                 String[] words = input.split(" ");
                 if (input.equals("bye") && words.length == 1) {
+                    BufferedWriter fileWriter = new BufferedWriter(new FileWriter(file, false));
+                    for (int i = 0; i < items.size(); i++) {
+                        Task thisTask = items.get(i);
+                        String line = thisTask.getType() + "`" + thisTask.getDescription() + "`";
+                        line += (thisTask.getDoneStatus() == true ? 1 : 0);
+                        if (thisTask.getType() == 'D' || thisTask.getType() == 'E') {
+                            line += "`";
+                            line += thisTask.getDate();
+                        }
+                        fileWriter.write(line);
+                        fileWriter.newLine();
+                    }
+                    fileWriter.close();
                     System.out.println("\t____________________________________________________________");
                     System.out.println("\tBye. Hope to see you again soon!");
                     System.out.println("\t____________________________________________________________");
@@ -69,7 +106,10 @@ public class Duke {
                     if (splitIndex == -1) {
                         throw new DukeException("Please specify the deadline date/time using the '/by' command.");
                     }
-                    String description = input.substring(0, splitIndex);
+                    else if (splitIndex == 0) {
+                        throw new DukeException("The description of a deadline cannot be empty.");
+                    }
+                    String description = input.substring(0, splitIndex - 1);
                     if (description.isEmpty()) {
                         throw new DukeException("The description of a deadline cannot be empty.");
                     }
@@ -95,7 +135,10 @@ public class Duke {
                     if (splitIndex == -1) {
                         throw new DukeException("Please specify the event date using the '/at' command.");
                     }
-                    String description = input.substring(0, splitIndex);
+                    else if (splitIndex == 0) {
+                        throw new DukeException("The description of an event cannot be empty.");
+                    }
+                    String description = input.substring(0, splitIndex - 1);
                     if (description.isEmpty()) {
                         throw new DukeException("The description of an event cannot be empty.");
                     }

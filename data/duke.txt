@@ -1,0 +1,5 @@
+T`read book`1
+D`return book`0`June 6th
+E`project meeting`0`Aug 6th 2-4pm
+T`join sports club`1
+D`cry immensely`0`Sun morning
