@@ -88,6 +88,24 @@ public class Duke {
                     System.out.println("\t  " + thisTask.toString());
                     System.out.println("\t____________________________________________________________");
                 }
+                else if (words[0].equals("remove") && words.length <= 2) {
+                    if (words.length == 1) {
+                        throw new DukeException("Please specify the task number you want to remove.");
+                    }
+                    if (!(words[1].matches("^\\d*$"))) {
+                        throw new DukeException("That's an invalid task number!");
+                    }
+                    int taskNumber = Integer.parseInt(words[1]) - 1;
+                    if (taskNumber + 1 > items.size()) {
+                        throw new DukeException("We don't have that many tasks!");
+                    }
+                    Task thisTask = items.get(taskNumber);
+                    System.out.println("\t____________________________________________________________");
+                    System.out.println("\tNoted. I've removed this task:");
+                    System.out.println("\t  " + thisTask.toString());
+                    System.out.println("\t____________________________________________________________");
+                    items.remove(taskNumber);
+                }
                 else if (words[0].equals("todo")) {
                     if (!(words.length > 1)) {
                         throw new DukeException("The description of a todo cannot be empty.");
