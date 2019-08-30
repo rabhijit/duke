@@ -88,9 +88,9 @@ public class Duke {
                     System.out.println("\t  " + thisTask.toString());
                     System.out.println("\t____________________________________________________________");
                 }
-                else if (words[0].equals("remove") && words.length <= 2) {
+                else if (words[0].equals("delete") && words.length <= 2) {
                     if (words.length == 1) {
-                        throw new DukeException("Please specify the task number you want to remove.");
+                        throw new DukeException("Please specify the task number you want to delete.");
                     }
                     if (!(words[1].matches("^\\d*$"))) {
                         throw new DukeException("That's an invalid task number!");
