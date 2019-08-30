@@ -105,6 +105,7 @@ public class Duke {
                     System.out.println("\t  " + thisTask.toString());
                     System.out.println("\t____________________________________________________________");
                     items.remove(taskNumber);
+                }
                 else if (words[0].equals("find")) {
                     if (words.length == 1) {
                         throw new DukeException("Come on, man, give me something to find.");
