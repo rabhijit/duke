@@ -105,6 +105,27 @@ public class Duke {
                     System.out.println("\t  " + thisTask.toString());
                     System.out.println("\t____________________________________________________________");
                     items.remove(taskNumber);
+                else if (words[0].equals("find")) {
+                    if (words.length == 1) {
+                        throw new DukeException("Come on, man, give me something to find.");
+                    }
+                    String query = "";
+                    for (int i = 1; i < words.length; i++) {
+                        query += words[i];
+                        if (i != words.length - 1) {
+                            query += " ";
+                        }
+                    }
+                    query = query.toLowerCase();
+                    System.out.println("\t____________________________________________________________");
+                    System.out.println("\tHere are the matching tasks in your list:");
+                    for (int j = 0; j < items.size(); j++) {
+                        Task thisTask = items.get(j);
+                        if (thisTask.getDescription().toLowerCase().contains(query)) {
+                            System.out.println("\t" + (j+1) + ". " + thisTask.toString());
+                        }
+                    }
+                    System.out.println("\t____________________________________________________________");
                 }
                 else if (words[0].equals("todo")) {
                     if (!(words.length > 1)) {
