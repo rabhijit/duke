@@ -4,9 +4,13 @@ import java.io.FileWriter;
 import java.io.File;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+import java.text.ParseException;
 
 public class Duke {
-    public static void main(String[] args) throws DukeException, IOException {
+    public static void main(String[] args) throws DukeException, IOException, ParseException {
         ArrayList<Task> items = new ArrayList<Task>();
         Scanner inputScanner = new Scanner(System.in);
         File file = new File("data/duke.txt");
@@ -46,7 +50,7 @@ public class Duke {
                         line += (thisTask.getDoneStatus() == true ? 1 : 0);
                         if (thisTask.getType() == 'D' || thisTask.getType() == 'E') {
                             line += "`";
-                            line += thisTask.getDate();
+                            line += thisTask.getDateToSave();
                         }
                         fileWriter.write(line);
                         fileWriter.newLine();
@@ -118,13 +122,18 @@ public class Duke {
                     if (by.equals("by")) {
                         throw new DukeException("The deadline cannot be empty.");
                     }
-                    Deadline newDeadline = new Deadline(description, by);
-                    items.add(newDeadline);
-                    System.out.println("\t____________________________________________________________");
-                    System.out.println("\tGot it. I've added this task: ");
-                    System.out.println("\t  " + newDeadline.toString());
-                    System.out.println("\tNow you have " + items.size() + " tasks in the list.");
-                    System.out.println("\t____________________________________________________________");
+                    try {
+                        Deadline newDeadline = new Deadline(description, by);
+                        items.add(newDeadline);
+                        System.out.println("\t____________________________________________________________");
+                        System.out.println("\tGot it. I've added this task: ");
+                        System.out.println("\t  " + newDeadline.toString());
+                        System.out.println("\tNow you have " + items.size() + " tasks in the list.");
+                        System.out.println("\t____________________________________________________________");
+                    }
+                    catch (ParseException e) {
+                        throw new DukeException("Please enter your deadline date in the format: dd/MM/yyyy HHmm");
+                    }
                 }
                 else if (words[0].equals("event")) {
                     if (!(words.length > 1)) {
@@ -147,13 +156,18 @@ public class Duke {
                     if (at.equals("at")) {
                         throw new DukeException("The event date cannot be empty.");
                     }
-                    Event newEvent = new Event(description, at);
-                    items.add(newEvent);
-                    System.out.println("\t____________________________________________________________");
-                    System.out.println("\tGot it. I've added this task: ");
-                    System.out.println("\t  " + newEvent.toString());
-                    System.out.println("\tNow you have " + items.size() + " tasks in the list.");
-                    System.out.println("\t____________________________________________________________");
+                    try {
+                        Event newEvent = new Event(description, at);
+                        items.add(newEvent);
+                        System.out.println("\t____________________________________________________________");
+                        System.out.println("\tGot it. I've added this task: ");
+                        System.out.println("\t  " + newEvent.toString());
+                        System.out.println("\tNow you have " + items.size() + " tasks in the list.");
+                        System.out.println("\t____________________________________________________________");
+                    }
+                    catch (ParseException e) {
+                        throw new DukeException("Please enter your event date in the format: dd/MM/yyyy HHmm");
+                    }
                 }
                 else {
                     throw new DukeException("I'm sorry, but I don't know what that means :-(");
