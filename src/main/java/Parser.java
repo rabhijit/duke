@@ -8,6 +8,16 @@ public class Parser {
         ;
     }
 
+    protected void checkParsableDate(String date) throws DukeException {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HHmm");
+            Date dateValue = formatter.parse(date);
+        }
+        catch (ParseException e) {
+            throw new DukeException("Please specify the date using the following format: dd/MM/yyyy HHmm");
+        }
+    }
+
     public ArrayList<String> parseInput(String input) throws DukeException {
         ArrayList<String> commands = new ArrayList<String>();
         String[] words = input.split(" ");
@@ -83,6 +93,7 @@ public class Parser {
             if (by.equals("by")) {
                 throw new DukeException("The deadline cannot be empty.");
             }
+            checkParsableDate(by);
             commands.add(by);
         }
         else if (words[0].equals("event")) {
@@ -108,6 +119,7 @@ public class Parser {
             if (at.equals("at")) {
                 throw new DukeException("The event date cannot be empty.");
             }
+            checkParsableDate(at);
             commands.add(at);
         }
         else {
