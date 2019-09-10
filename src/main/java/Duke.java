@@ -25,21 +25,23 @@ public class Duke {
         storage = new Storage(filePath);
         tasks = new TaskList(storage.getItems());
         parser = new Parser();
-        ai = new Ai();
         ui = new Ui();
     }
 
     /**
-     * This method runs the parser, which obtains and parses the input into a format
-     * executable by the AI subclass, which then carries out the necessary tasks according to
-     * the parsed input.
+     * This method repeatedly runs the parser, which obtains and parses the input, and
+     * depending to the parsed input, creates an executable command, which then carries out
+     * the necessary tasks. Will halt when a command issues an exit code of true.
      * @throws ParseException if input is un-parsable
      * @throws IOException if there is an error in reading input or printing output
      */
     public void run() throws ParseException, IOException {
-        while (ai.getExitCode() != 1) {
+        Boolean toExit = false;
+        while (!toExit) {
             try {
-                ai.execute(parser.parseInput(ui.getInput()), ui, storage, tasks);
+                Command c = parser.parseInput(ui.getInput());
+                c.execute(ui, storage, tasks);
+                toExit = c.getExitCode();
             }
             catch (DukeException e) {
                 e.showError();

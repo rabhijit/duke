@@ -3,8 +3,9 @@ import java.io.*;
 import java.text.*;
 
 /**
- * This class takes in a String of input from the Ui, and parses it into an executable
- * format for the Ai to execute the commands as necessary.
+ * This class takes in a String of input from the Ui, and depending on the content of
+ * the input, parses it into a unique executable command that will carry out the tasks
+ * required for that input.
  */
 
 public class Parser {
@@ -24,42 +25,39 @@ public class Parser {
     }
 
     /**
-     * Parses the input obtained by the Ui from the user into an executable format for the Ai.
+     * Parses the input obtained by the Ui from the user into an executable command.
      * @param input the input obtained from the user by the Ui.
-     * @return an array of Strings that the Ai can read and execute commands
+     * @return a Command that can be executed to carry out the necessary tasks
      * @throws DukeException if the input is in a wrong format or does not make sense.
      */
-    public ArrayList<String> parseInput(String input) throws DukeException {
-        ArrayList<String> commands = new ArrayList<String>();
+    public Command parseInput(String input) throws DukeException, ParseException {
+        Command c;
         String[] words = input.split(" ");
         if (input.equals("bye") && words.length == 1) {
-            commands.add("close");
+            c = new CloseCommand();
         }
         else if (input.equals("list") && words.length == 1) {
-            commands.add("list");
+            c = new ListCommand();
         }
         else if (words[0].equals("done") && words.length <= 2) {
-            commands.add("done");
             if (words.length == 1) {
                 throw new DukeException("Please specify the task number you want to mark as done.");
             }
             if (!(words[1].matches("[1-9][0-9]*"))) {
                 throw new DukeException("That's an invalid task number!");
             }
-            commands.add(words[1]);
+            c = new DoneCommand(words[1]);
         }
         else if (words[0].equals("delete") && words.length <= 2) {
-            commands.add("delete");
             if (words.length == 1) {
                 throw new DukeException("Please specify the task number you want to mark as done.");
             }
             if (!(words[1].matches("[1-9][0-9]*"))) {
                 throw new DukeException("That's an invalid task number!");
             }
-            commands.add(words[1]);
+            c = new DeleteCommand(words[1]);
         }
         else if (words[0].equals("find")) {
-            commands.add("find");
             if (words.length == 1) {
                 throw new DukeException("Tell me what you want me to find.");
             }
@@ -71,18 +69,16 @@ public class Parser {
                 }
             }
             query = query.toLowerCase();
-            commands.add(query);
+            c = new FindCommand(query);
         }
         else if (words[0].equals("todo")) {
-            commands.add("todo");
             if (!(words.length > 1)) {
                 throw new DukeException("The description of a todo cannot be empty.");
             }
             input = input.replaceFirst("todo ", "");
-            commands.add(input);
+            c = new TodoCommand(input);
         }
         else if (words[0].equals("deadline")) {
-            commands.add("deadline");
             if (!(words.length > 1)) {
                 throw new DukeException("The description of a deadline cannot be empty.");
             }
@@ -98,17 +94,15 @@ public class Parser {
             if (description.isEmpty()) {
                 throw new DukeException("The description of a deadline cannot be empty.");
             }
-            commands.add(description);
             String by = input.substring(splitIndex + 1);
             by = by.replaceFirst("by ", "");
             if (by.equals("by")) {
                 throw new DukeException("The deadline cannot be empty.");
             }
             checkParsableDate(by);
-            commands.add(by);
+            c = new DeadlineCommand(description, by);
         }
         else if (words[0].equals("event")) {
-            commands.add("event");
             if (!(words.length > 1)) {
                 throw new DukeException("The description of an event cannot be empty.");
             }
@@ -124,18 +118,17 @@ public class Parser {
             if (description.isEmpty()) {
                 throw new DukeException("The description of an event cannot be empty.");
             }
-            commands.add(description);
             String at = input.substring(splitIndex + 1);
             at = at.replaceFirst("at ", "");
             if (at.equals("at")) {
                 throw new DukeException("The event date cannot be empty.");
             }
             checkParsableDate(at);
-            commands.add(at);
+            c = new EventCommand(description, at);
         }
         else {
             throw new DukeException("I'm sorry, but I don't know what that means :-(");
         }
-        return commands;
+        return c;
     }
 }

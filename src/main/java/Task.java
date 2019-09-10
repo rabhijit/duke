@@ -78,7 +78,7 @@ public class Task {
      */
     public String getDate() {
         DateFormat dayFormat = new SimpleDateFormat("d");
-        int day = Integer.parseInt(dayFormat.format(date));
+        int day = Integer.parseInt(dayFormat.format(date)) % 10;
         String suffix = day == 1 ? "st" : (day == 2 ? "nd" : (day == 3 ? "rd" : "th"));
         String stringDate = (new SimpleDateFormat("EEEEE, ")).format(date) + (dayFormat.format(date)) + suffix + " of " + (new SimpleDateFormat("MMMMM yyyy, hh:mm aaa")).format(date);
         return stringDate;
