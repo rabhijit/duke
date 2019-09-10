@@ -12,7 +12,6 @@ public class Duke {
     private TaskList tasks;
     private Ui ui;
     private Parser parser;
-    private Ai ai;
 
     /**
      * Constructor for Duke that instantiates the necessary sub-classes for
