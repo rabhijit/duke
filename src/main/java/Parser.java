@@ -2,12 +2,17 @@ import java.util.*;
 import java.io.*;
 import java.text.*;
 
-public class Parser {
-    // cleans up user input and passes to AI
-    public Parser() {
-        ;
-    }
+/**
+ * This class takes in a String of input from the Ui, and parses it into an executable
+ * format for the Ai to execute the commands as necessary.
+ */
 
+public class Parser {
+    /**
+     * Checks if an entered date is in the required format. Throws a DukeException otherwise.
+     * @param date the date entered by the user
+     * @throws DukeException if the format of the entered date is invalid.
+     */
     protected void checkParsableDate(String date) throws DukeException {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HHmm");
@@ -18,6 +23,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses the input obtained by the Ui from the user into an executable format for the Ai.
+     * @param input the input obtained from the user by the Ui.
+     * @return an array of Strings that the Ai can read and execute commands
+     * @throws DukeException if the input is in a wrong format or does not make sense.
+     */
     public ArrayList<String> parseInput(String input) throws DukeException {
         ArrayList<String> commands = new ArrayList<String>();
         String[] words = input.split(" ");

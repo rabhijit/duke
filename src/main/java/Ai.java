@@ -2,18 +2,43 @@ import java.util.*;
 import java.io.*;
 import java.text.*;
 
+/**
+ * This class continuously takes in a parsed input from the parser, and executes an action
+ * based on what the parsed input is. Stops taking in input when 'bye' is entered
+ * as an input.
+ */
+
 public class Ai {
     protected String command;
     protected int exitCode;
 
+    /**
+     * Constructor for Ai that sets the exit code to 0, allowing the class
+     * to repeatedly take in input
+     */
     public Ai() {
         exitCode = 0;
     }
 
+    /**
+     * Returns the exit code. Is called in the Duke class.
+     * @return exitCode the exit code for the Ai class
+     */
     public int getExitCode() {
         return exitCode;
     }
 
+    /**
+     * This function takes in a parsed array of commands from the parser, and depending on
+     * what the array of commands are, executes the necessary functions for Duke.
+     * @param commands the parsed array of commands in String form, as parsed by the parser.
+     * @param ui takes in an instance of the Ui class to print output to the CLI if needed.
+     * @param storage takes in an instance of the Storage class to save Task data if Duke is closed.
+     * @param tasks takes in the TaskList containing the Tasks to search for and save tasks if required.
+     * @throws ParseException if any input is un-parsable
+     * @throws IOException if there is an error in reading input or printing output
+     * @throws DukeException if the input has no meaning or does not follow our format
+     */
     public void execute(ArrayList<String> commands, Ui ui, Storage storage, TaskList tasks) throws ParseException, IOException, DukeException {
         command = commands.get(0);
         if (command.equals("close")) {

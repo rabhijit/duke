@@ -3,14 +3,26 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests the Parser class by feeding it an input String and comparing it against the
+ * output we desire, which should be an ArrayList of Strings to be fed to the Ai.
+ */
+
 public class ParserTest {
     protected ArrayList<String> testOutput = new ArrayList<String>();
     protected Parser parser;
 
+    /**
+     * Constructor of this test. Initializes the Parser.
+     */
     public ParserTest() {
         parser = new Parser();
     }
 
+    /**
+     * Tests the Parser by feeding it a String input to create a Deadline, and comparing it
+     * against the ArrayList of String commands that we should obtain.
+     */
     @Test
     public void testDeadline() {
         try {
@@ -24,6 +36,10 @@ public class ParserTest {
         }
     }
 
+    /**
+     * Tests the Parser by feeding it a String input to create an Event, and comparing it
+     * against the ArrayList of String commands that we should obtain.
+     */
     @Test
     public void testEvent() {
         try {
@@ -37,6 +53,10 @@ public class ParserTest {
         }
     }
 
+    /**
+     * Tests the Parser by feeding it a String input to create a Todo, and comparing it
+     * against the ArrayList of String commands that we should obtain.
+     */
     @Test
     public void testTodo() {
         try {
